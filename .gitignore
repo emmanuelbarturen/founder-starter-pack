@@ -33,3 +33,6 @@ bun.lockb
 # Planes de trabajo locales
 Plans/
 *.skill
+
+# Instrucciones locales para Claude Code
+CLAUDE.md

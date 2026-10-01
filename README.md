@@ -1,6 +1,6 @@
-![Productividad para Claude Code](assets/banner.svg)
+![Founder Starter Pack](assets/banner.svg)
 
-# Productividad para Claude Code
+# Founder Starter Pack
 
 Marketplace de plugins de productividad para [Claude Code](https://code.claude.com), en español.
 
