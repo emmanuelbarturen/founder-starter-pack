@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>[titular de la pieza]</title>
+<!--
+  Plantilla de pieza visual. Se copia a posts/NN-<slug>-pieza/pieza.html y se llena.
+  1. Los valores de :root salen de estilo.md, campo por campo.
+  2. @page lleva el mismo tamaño que la lámina: 1080px 1350px (4:5) o 1080px 1080px (1:1).
+  3. Cada lámina es una <section class="lamina ..."> con id lamina-01, lamina-02...
+  4. El texto de cada lámina se copia del borrador aprobado, sin cambiarlo.
+  Abierto en un navegador se ven todas las láminas, una debajo de otra.
+  Con #lamina-03 al final de la dirección se ve solo esa lámina.
+-->
+<style>
+  :root {
+    --fondo: #FFFFFF;            /* estilo.md → Fondo */
+    --texto: #111111;            /* estilo.md → Texto */
+    --acento: #0A66FF;           /* estilo.md → Acento */
+    --sobre-acento: #FFFFFF;     /* blanco o casi negro: el que mejor se lea sobre el acento */
+    --fuente-titulos: "Helvetica Neue", Arial, sans-serif;   /* estilo.md → Tipografia de titulos */
+    --fuente-texto: "Helvetica Neue", Arial, sans-serif;     /* estilo.md → Tipografia de texto */
+    --ancho: 1080px;
+    --alto: 1350px;              /* 1350px con 4:5 · 1080px con 1:1 */
+  }
+  @page { size: 1080px 1350px; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--fondo); }
+  body { width: var(--ancho); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .lamina {
+    position: relative; width: var(--ancho); height: var(--alto); overflow: hidden;
+    display: flex; flex-direction: column; justify-content: center; gap: 36px;
+    padding: 110px 92px 170px;
+    background: var(--fondo); color: var(--texto);
+    font-family: var(--fuente-texto); font-size: 42px; line-height: 1.35;
+    break-after: page; page-break-after: always;
+  }
+  .lamina:last-child { break-after: auto; page-break-after: auto; }
+  body:has(.lamina:target) .lamina:not(:target) { display: none; }
+
+  h1, h2 { font-family: var(--fuente-titulos); line-height: 1.08; letter-spacing: -0.01em; }
+  h1 { font-size: 96px; }
+  h2 { font-size: 68px; }
+  strong { color: var(--acento); }
+  .barra { width: 120px; height: 14px; background: var(--acento); }
+  .numero { font-family: var(--fuente-titulos); font-size: 44px; font-weight: 700; color: var(--acento); }
+  .bajada { font-size: 46px; opacity: 0.8; }
+
+  .cierre { background: var(--acento); color: var(--sobre-acento); }
+  .cierre strong, .cierre .numero { color: var(--sobre-acento); }
+
+  .infografico { justify-content: flex-start; gap: 44px; }
+  .infografico h1 { font-size: 72px; }
+  .bloques { display: flex; flex-direction: column; gap: 34px; list-style: none; }
+  .bloque { display: grid; grid-template-columns: 250px 1fr; gap: 32px; align-items: center;
+            padding-top: 30px; border-top: 3px solid color-mix(in srgb, var(--texto) 16%, transparent); }
+  .dato { font-family: var(--fuente-titulos); font-size: 76px; font-weight: 700; line-height: 1; color: var(--acento); }
+  .bloque p { font-size: 36px; }
+  .fuente { font-size: 24px; opacity: 0.65; }
+
+  .tarjeta { text-align: left; }
+  .tarjeta h1 { font-size: 84px; }
+
+  .imagen { width: 100%; max-height: 520px; object-fit: cover; border-radius: 18px; }
+  .hueco { display: flex; align-items: center; justify-content: center; height: 420px; padding: 24px;
+           border: 4px dashed var(--acento); border-radius: 18px; font-size: 30px; text-align: center; }
+
+  .pie-lamina {
+    position: absolute; left: 92px; right: 92px; bottom: 70px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    font-size: 28px; opacity: 0.85;
+  }
+  .pie-lamina .firma { display: flex; align-items: center; gap: 18px; }
+  .pie-lamina img { height: 56px; width: auto; border-radius: 8px; }
+</style>
+</head>
+<body>
+
+<!-- CARRUSEL. Portada: el titular de «Lámina 1 (portada)». -->
+<section class="lamina portada" id="lamina-01">
+  <div class="barra"></div>
+  <h1>[Titular de la portada]</h1>
+  <p class="bajada">[Bajada, solo si el guion la trae]</p>
+  <footer class="pie-lamina">
+    <span class="firma"><!-- <img src="[estilo.md → Logo]" alt=""> -->[estilo.md → Firma]</span>
+    <span>1 / [total]</span>
+  </footer>
+</section>
+
+<!-- CARRUSEL. Una por cada lámina del guion: su título en negrita va en h2, sus frases en p. -->
+<section class="lamina contenido" id="lamina-02">
+  <span class="numero">01</span>
+  <h2>[Título de la lámina]</h2>
+  <p>[Una o dos frases de la lámina, tal como están en el borrador]</p>
+  <!-- Si la lámina pide una imagen: <img class="imagen" src="[ruta]" alt="[qué muestra]">
+       Si la imagen no existe todavía: <div class="hueco">Aquí va: [qué imagen pide el guion]</div> -->
+  <footer class="pie-lamina">
+    <span class="firma">[estilo.md → Firma]</span>
+    <span>2 / [total]</span>
+  </footer>
+</section>
+
+<!-- CARRUSEL. Última lámina: el cierre del guion. -->
+<section class="lamina cierre" id="lamina-03">
+  <h2>[Cierre]</h2>
+  <p>[Con qué se queda quien lo lee, o qué se le pide]</p>
+  <footer class="pie-lamina">
+    <span class="firma">[estilo.md → Firma]</span>
+    <span>3 / [total]</span>
+  </footer>
+</section>
+
+<!-- INFOGRÁFICO. Una sola lámina: Título, los bloques en orden de lectura y el Pie. -->
+<section class="lamina infografico" id="lamina-01">
+  <div class="barra"></div>
+  <h1>[Título:]</h1>
+  <ul class="bloques">
+    <li class="bloque"><span class="dato">[dato]</span><p>[qué significa] <span class="fuente">[fuente del dato]</span></p></li>
+    <li class="bloque"><span class="dato">[dato]</span><p>[qué significa] <span class="fuente">[fuente del dato]</span></p></li>
+  </ul>
+  <footer class="pie-lamina">
+    <span class="firma">[el Pie: del borrador, tal cual]</span>
+  </footer>
+</section>
+
+<!-- TARJETA. Una sola lámina con la frase o el dato que pide la línea **Imagen:**. -->
+<section class="lamina tarjeta" id="lamina-01">
+  <div class="barra"></div>
+  <h1>[La frase o el dato]</h1>
+  <p class="bajada">[Texto de apoyo, solo si la línea lo pide]</p>
+  <footer class="pie-lamina">
+    <span class="firma">[estilo.md → Firma]</span>
+  </footer>
+</section>
+
+</body>
+</html>

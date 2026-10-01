@@ -1,0 +1,63 @@
+{
+  "name": "productividad-claude-code-marketplace",
+  "description": "Plugins de productividad para Claude Code, en español: proyectos (el ciclo de trabajo de una empresa en Markdown) y contenido (redactores que escriben con tu propia voz y una parrilla de contenidos en Notion, Airtable o ClickUp).",
+  "owner": {
+    "name": "Emmanuel Cervera Barturen",
+    "url": "https://github.com/emmanuelbarturen"
+  },
+  "plugins": [
+    {
+      "name": "proyectos",
+      "source": "./plugins/proyectos",
+      "description": "Ciclo de trabajo de una empresa en Markdown (Company Cycle OS): /proyectos:setup, explorar, proponer, aplicar, archivar y validar, con sus reglas, plantillas y validador de estructura",
+      "version": "0.2.0",
+      "author": {
+        "name": "Emmanuel Cervera Barturen",
+        "url": "https://github.com/emmanuelbarturen"
+      },
+      "repository": "https://github.com/emmanuelbarturen/productividad-claude-code-marketplace",
+      "license": "MIT",
+      "category": "productivity",
+      "keywords": [
+        "proyectos",
+        "gestion",
+        "markdown",
+        "empresa",
+        "espanol",
+        "productividad"
+      ],
+      "strict": false
+    },
+    {
+      "name": "contenido",
+      "source": "./plugins/contenido",
+      "description": "Redactores que escriben con tu propia voz y una parrilla de contenidos en Notion, Airtable o ClickUp. /contenido:setup te guía desde cero hasta tu primera publicación. Las skills construir-* definen: construir-redactores (sobre-mi.md, voz.md y un redactor por grupo de temas), construir-formatos (tus tipos de publicación por canal, con una ficha por tipo), construir-estilo (cómo se ven tus piezas) y construir-parrilla (el tablero). Las skills post-* llevan cada pieza: post-proponer (temas aprobados), post-redactar (borradores aprobados con un solo ok), post-disenar (el carrusel, el infográfico o la tarjeta armados con tu estilo) y post-publicar (publicación cerrada con su link)",
+      "version": "0.4.0",
+      "author": {
+        "name": "Emmanuel Cervera Barturen",
+        "url": "https://github.com/emmanuelbarturen"
+      },
+      "repository": "https://github.com/emmanuelbarturen/productividad-claude-code-marketplace",
+      "license": "MIT",
+      "category": "productivity",
+      "keywords": [
+        "contenido",
+        "redactores",
+        "voz",
+        "escritura",
+        "linkedin",
+        "marca-personal",
+        "parrilla",
+        "formatos",
+        "notion",
+        "airtable",
+        "clickup",
+        "estilo",
+        "carrusel",
+        "canva",
+        "setup"
+      ],
+      "strict": false
+    }
+  ]
+}
