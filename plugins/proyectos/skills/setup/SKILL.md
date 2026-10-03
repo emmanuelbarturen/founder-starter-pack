@@ -1,12 +1,12 @@
 ---
 name: setup
-description: Primera sesión en el repo — nombra tu empresa, declara sus áreas y temas, crea los descriptores, borra la empresa de ejemplo y deja el repo versionado. Se corre una sola vez
+description: Primera sesión en el repo — nombra tu empresa, declara sus áreas y temas, crea los descriptores, borra la empresa de ejemplo si la hay y deja el repo versionado. Se corre una sola vez, sobre la plantilla con ejemplo o después de /proyectos:init
 argument-hint: (sin argumentos)
 disable-model-invocation: true
 ---
 
 Pones **Company Cycle OS** a punto para la empresa del usuario, **una sola vez**. Al terminar, la raíz describe su
-empresa real, cada área tiene sus tres descriptores y sus temas, la empresa de ejemplo desapareció por completo, y
+empresa real, cada área tiene sus tres descriptores y sus temas, la empresa de ejemplo (si la había) desapareció, y
 el repo tiene su primer commit. El usuario puede estar en la app de escritorio sin terminal: todo lo que haya que
 ejecutar lo ejecutas tú, pidiendo permiso cuando la herramienta lo pida.
 
@@ -14,6 +14,10 @@ ejecutar lo ejecutas tú, pidiendo permiso cuando la herramienta lo pida.
 
 Lee `_context.md` de la raíz y mira el campo `Id` de la ficha.
 
+- **No hay `_context.md`** → la carpeta todavía no tiene estructura. Dile que escriba `/proyectos:init`, que la crea
+  y vuelve aquí solo, y termina.
+- **`Id` = `pendiente`** → estructura recién creada por `/proyectos:init`, sin empresa de ejemplo. Sigue al paso 1 y
+  **sáltate el paso 3**: no hay nada que borrar.
 - **`Id` = `ejemplo`** → copia recién descargada con la empresa de muestra (Taller Norte). Sigue al paso 1.
 - **Cualquier otro valor** → el repo ya está en uso. Dilo y pregunta con `AskUserQuestion` (header "Repo en uso"):
   **Solo agregar áreas** / **Solo revisar la estructura** (corre el paso 6 y termina) / **Cancelar**. **Nunca
@@ -41,6 +45,8 @@ Presenta el catálogo sugerido de `${CLAUDE_PLUGIN_ROOT}/templates/_context-raiz
 
 ## 3. Borrar la empresa de ejemplo — por manifiesto
 
+**Solo si el `Id` era `ejemplo`.** Con `Id` = `pendiente` este paso no corre: pasa al 4.
+
 Lee `.ccos/ejemplo.txt`. Borra **exactamente** las rutas listadas ahí y **ninguna otra**. Los descriptores de la
 raíz, `_Referencias/_index.md` y `Decisiones/` **no se borran: se reescriben** en el paso 4. Antes de borrar, muestra
 la lista, avisa que la app va a pedir permiso por cada borrado, y confirma con `AskUserQuestion` (header "Ejemplo"):
@@ -52,13 +58,19 @@ borrar lo que ya no existe no hace nada.
 
 1. Raíz: `_context.md` desde `${CLAUDE_PLUGIN_ROOT}/templates/_context-raiz.md` con la ficha del paso 1 (`Id` = un slug en kebab-case
    del nombre), la tabla de áreas **recortada a lo declarado** y «Trabajos activos» vacío; `_rules.md` desde
-   `${CLAUDE_PLUGIN_ROOT}/templates/_rules-raiz.md`; `_enlaces.md` desde `${CLAUDE_PLUGIN_ROOT}/templates/_enlaces-raiz.md`.
+   `${CLAUDE_PLUGIN_ROOT}/templates/base/_rules.md`; `_enlaces.md` desde `${CLAUDE_PLUGIN_ROOT}/templates/base/_enlaces.md`.
+   Si vienes de `init`, estos tres ya existen como provisionales: reescríbelos conservando su fecha `Creado:`.
 2. Por cada área: la carpeta, sus tres descriptores desde `${CLAUDE_PLUGIN_ROOT}/templates/area/` con la responsabilidad **redactada**
    (no en blanco) y la tabla de temas con lo declarado, y una carpeta por tema.
 3. `Decisiones/Q<N>-<AAAA>.md` del quarter actual desde `${CLAUDE_PLUGIN_ROOT}/templates/decisiones-quarter.md`, con la primera línea:
    `AAAA-MM-DD · [hito] Adopción de Company Cycle OS: <n> áreas declaradas (<lista>)`.
-4. `_Referencias/_index.md` desde la forma del que borraste, con la tabla vacía.
-5. Fecha de hoy y el creador del paso 1 en todas las cabeceras.
+4. Solo si venías del ejemplo: `_Referencias/_index.md` desde la forma del que borraste, con la tabla vacía.
+5. Fecha de hoy y el creador del paso 1 en todas las cabeceras. Si vienes de `init`, eso incluye los descriptores
+   de `Decisiones/`, `Proyectos/`, `Proyectos/Tareas/`, `Proyectos/Proyectos-Regulares/` y sus dos `Archivados/`:
+   cambia su `Creador: por definir` por el creador real. Ninguna cabecera debe quedar con `por definir`.
+6. Si faltan carpetas de servicio (repo que no pasó por `init`), créalas con sus descriptores desde
+   `${CLAUDE_PLUGIN_ROOT}/templates/base/Proyectos/` y `${CLAUDE_PLUGIN_ROOT}/templates/base/Decisiones/`, sin pisar
+   lo que exista.
 
 ## 5. Confidencialidad
 
@@ -77,7 +89,7 @@ finales (solo cómo opera la empresa: cifras agregadas, decisiones, procesos)?* 
 
 ## 7. Confirmar
 
-Devuelve en pocas líneas: la empresa, sus áreas con sus temas, si se borró el ejemplo, el resultado del validador,
+Devuelve en pocas líneas: la empresa, sus áreas con sus temas, si se borró el ejemplo (cuando lo había), el resultado del validador,
 el commit, y el siguiente paso: **`/proyectos:explorar`** para arrancar el primer trabajo.
 
 Idioma: español siempre. Directo, breve, cero relleno.

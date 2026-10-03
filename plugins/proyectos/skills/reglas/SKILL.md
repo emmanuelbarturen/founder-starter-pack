@@ -18,9 +18,12 @@ nombre, o pide leer un archivo concreto. En la duda, pregunta.
 
 | Archivo | Dónde | Qué dice |
 |---|---|---|
-| `_context.md` | raíz, cada área, `Proyectos/` | qué vive aquí; en la raíz la **tabla de áreas**, en cada área la **tabla de temas** |
-| `_rules.md` | raíz, cada área | cómo se documenta aquí y cómo se crea un proyecto de esta área |
-| `_enlaces.md` | raíz, cada área | enlaces externos: documentos, tableros, carpetas compartidas |
+| `_context.md` | raíz, cada área, carpetas de servicio | qué vive aquí; en la raíz la **tabla de áreas**, en cada área la **tabla de temas** |
+| `_rules.md` | raíz, cada área, carpetas de servicio | cómo se documenta aquí y cómo se crea un proyecto de esta área |
+| `_enlaces.md` | raíz, cada área, carpetas de servicio | enlaces externos: documentos, tableros, carpetas compartidas |
+
+Carpetas de servicio: `Decisiones/`, `Proyectos/`, `Proyectos/Tareas/`, `Proyectos/Proyectos-Regulares/` y la
+`Archivados/` de cada una de estas dos.
 
 Léelos antes de crear, mover o editar nada en su carpeta. Las áreas se declaran en la tabla de `_context.md` raíz y
 los temas en la tabla de cada área; el ruteo se hace contra esas tablas. **Ninguna sesión crea un área ni un tema sin
@@ -39,22 +42,25 @@ carpeta de un proyecto guarda el plan, no los entregables: nada queda ahí «por
 ```
 _context.md · _rules.md · _enlaces.md      la empresa: ficha, tabla de áreas, reglas, enlaces
 <Área>/<tema>/*.md                         documentos, siempre dentro de un tema
-Proyectos/<slug>/                          proyecto: propuesta.md · exploracion.md · solucion.md · tareas.md · adjuntos/
+Proyectos/Proyectos-Regulares/<slug>/      proyecto: propuesta.md · exploracion.md · solucion.md · tareas.md · adjuntos/
+Proyectos/Proyectos-Regulares/Archivados/  proyectos cerrados, con `Resultado:` en su Estado
 Proyectos/Tareas/<slug>.md                 tarea (mini-proyecto): un solo archivo
-Proyectos/Archivados/                      lo cerrado, con `Resultado:` en su Estado
+Proyectos/Tareas/Archivados/               tareas cerradas, con `Resultado:` en su Estado
 _Referencias/_index.md                     archivos de afuera que se consultan; un nivel de subcarpetas
 Decisiones/Q<N>-<AAAA>.md                  bitácora de la empresa, una línea por evento
 .ccos/                                     patrones de higiene y manifiesto del ejemplo
 ```
 
 Nombres reservados: en la raíz `Proyectos`, `Decisiones`, `_Referencias`, `Plans`, `.claude`, `.ccos`; dentro de
-`Proyectos/`, `Tareas`, `Archivados` y `adjuntos`.
+`Proyectos/`, `Tareas`, `Proyectos-Regulares` y `adjuntos`; dentro de `Tareas/` y de `Proyectos-Regulares/`,
+`Archivados`. En `Proyectos/` no vive nada suelto: solo sus descriptores y esas dos carpetas.
 
 ## El ciclo
 
 | Situación | Comando |
 |---|---|
-| Primera vez: nombrar la empresa, declarar áreas y temas, borrar el ejemplo | `/proyectos:setup` |
+| Carpeta vacía: crear la estructura base (y seguir con setup) | `/proyectos:init` |
+| Primera vez: nombrar la empresa, declarar áreas y temas, borrar el ejemplo si lo hay | `/proyectos:setup` |
 | Pensar una idea sin compromiso, antes de crear nada | `/proyectos:explorar` |
 | Crear o modificar un trabajo hasta tener su plan de tareas | `/proyectos:proponer` |
 | Ejecutar el plan y dejar cada resultado en su área y tema | `/proyectos:aplicar` |
@@ -62,8 +68,8 @@ Nombres reservados: en la raíz `Proyectos`, `Decisiones`, `_Referencias`, `Plan
 | Revisar la estructura | `/proyectos:validar` |
 
 - **Tarea**: cabe en una página, un actor, sin solución técnica propia, hasta ~5 pasos. **Proyecto**: necesita
-  requerimientos, decisiones propias o más de ~5 tareas. Si una tarea crece, se gradúa: carpeta con el mismo slug y el
-  archivo pasa a ser su `propuesta.md`.
+  requerimientos, decisiones propias o más de ~5 tareas. Si una tarea crece, se gradúa: `Proyectos/Tareas/<slug>.md`
+  pasa a ser `Proyectos/Proyectos-Regulares/<slug>/propuesta.md`.
 - `<slug>` en kebab-case, sin fechas. Un proyecto vive con `propuesta.md` y `exploracion.md` en `explorar` o
   `proponer`; **desde `aplicar` los cuatro documentos son obligatorios**.
 - **Bloque `## Estado`** en `propuesta.md` o en la tarea, una viñeta literal por campo `- **Campo:** valor`: `Fase:`

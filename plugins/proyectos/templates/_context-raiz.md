@@ -7,7 +7,7 @@
 
 | Campo | Valor |
 |---|---|
-| Id | `<id>`  <!-- `ejemplo` en la copia de muestra; setup lo cambia --> |
+| Id | `<id>`  <!-- `ejemplo` en la copia de muestra, `pendiente` tras init; setup lo cambia --> |
 | Nombre | <nombre para mostrar> |
 | Qué hace | <una línea: qué vende y a quién> |
 | Etapa | <idea / validación / operando / escalando> |
@@ -37,12 +37,12 @@ descriptores. Nombres de carpeta sin tildes ni espacios: la carpeta es el identi
 > **Catálogo sugerido, no obligatorio.** Una consultora quizá cambie `Producto/` por `Servicios/`. Un e-commerce
 > quizá agregue `Logistica/`. Una empresa con una sola área es válida.
 
-## Carpetas de servicio (siempre presentes)
+## Carpetas de servicio
 
 | Carpeta | Qué vive aquí |
 |---|---|
-| `Proyectos/` | todo trabajo: proyectos (carpeta de 4 documentos) y tareas (un archivo) |
-| `_Referencias/` | archivos de afuera que se consultan, con `_index.md` |
+| `Proyectos/` | todo trabajo: tareas en `Tareas/` (un archivo) y proyectos en `Proyectos-Regulares/` (carpeta de 4 documentos) |
+| `_Referencias/` | archivos de afuera que se consultan, con `_index.md` (opcional: existe cuando hay algo que guardar) |
 | `Decisiones/` | bitácora de la empresa, por quarter |
 
 ## Trabajos activos

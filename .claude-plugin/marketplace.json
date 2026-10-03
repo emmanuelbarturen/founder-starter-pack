@@ -9,8 +9,8 @@
     {
       "name": "proyectos",
       "source": "./plugins/proyectos",
-      "description": "Ciclo de trabajo de una empresa en Markdown (Company Cycle OS): /proyectos:setup, explorar, proponer, aplicar, archivar y validar, con sus reglas, plantillas y validador de estructura",
-      "version": "0.2.0",
+      "description": "Ciclo de trabajo de una empresa en Markdown (Company Cycle OS): /proyectos:init crea la estructura base desde una carpeta vacía y sigue con setup; luego explorar, proponer, aplicar, archivar y validar, con sus reglas, plantillas y validador de estructura",
+      "version": "0.3.0",
       "author": {
         "name": "Emmanuel Cervera Barturen",
         "url": "https://github.com/emmanuelbarturen"

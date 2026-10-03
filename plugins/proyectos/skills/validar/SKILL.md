@@ -14,12 +14,18 @@ Argumentos: $ARGUMENTS (`--publicar` activa el chequeo V11).
 ## Nombres reservados
 
 Raíz (no son áreas): `Proyectos`, `Decisiones`, `_Referencias`, `_Templates`, `Plans`, `.claude`, `.ccos`, `.git`.
-Dentro de `Proyectos/` (no son trabajos): `Tareas`, `Archivados`, `adjuntos`.
+Dentro de `Proyectos/` (no son trabajos): `Tareas`, `Proyectos-Regulares`, `adjuntos`. Dentro de `Tareas/` y de
+`Proyectos-Regulares/`: `Archivados`.
+
+Carpetas de servicio: `Proyectos`, `Proyectos/Tareas`, `Proyectos/Tareas/Archivados`, `Proyectos/Proyectos-Regulares`,
+`Proyectos/Proyectos-Regulares/Archivados` y `Decisiones`. En ellas los tres descriptores (`_context.md`, `_rules.md`,
+`_enlaces.md`) nunca cuentan como tarea, proyecto ni archivo de bitácora.
 
 ## Chequeos (E = error · A = aviso)
 
 1. **V1 Descriptores.** `_context.md` en la raíz y en `Proyectos/` (E); `_rules.md` y `_enlaces.md` en la raíz (A).
-   En cada área (carpeta de la raíz no reservada): `_context.md`, `_rules.md` y `_enlaces.md` (E cada uno).
+   En cada área (carpeta de la raíz no reservada): `_context.md`, `_rules.md` y `_enlaces.md` (E cada uno). En cada
+   carpeta de servicio que exista, cada descriptor que falte (A), salvo `Proyectos/_context.md`, que ya es E.
 2. **V2 Áreas.** Las filas de la tabla «Áreas» de `_context.md` raíz (columna Carpeta, entre acentos graves) contra
    las carpetas reales de la raíz menos las reservadas, en ambos sentidos: declarada sin carpeta (E), carpeta sin
    fila (E).
@@ -34,10 +40,16 @@ Dentro de `Proyectos/` (no son trabajos): `Tareas`, `Archivados`, `adjuntos`.
    `Proyectos/`, `_Referencias/`, `_Templates/` (solo repos anteriores al plugin) y `.claude/` (A).
 7. **V7 Referencias.** `_Referencias/` con un solo nivel de subcarpetas (E); cada archivo listado en `_index.md` por
    su ruta relativa y sin filas que apunten a archivos inexistentes (E).
-8. **V8 Trabajos.** Cada `Proyectos/<slug>/propuesta.md` y `Proyectos/Tareas/<slug>.md` (y los de `Archivados/`)
-   con `## Estado`, `Fase:` en `explorar | proponer | aplicar | pausado | archivado`, y `Área:` que exista en la tabla
-   de áreas (E). Un trabajo en `Archivados/` sin `Resultado:` (A; `ninguno — …` cuenta como presente).
-9. **V9 Bitácora.** Solo archivos `Q[1-4]-AAAA.md` en `Decisiones/` (E). Desde la primera línea que empieza con
+8. **V8 Trabajos.** Cada `Proyectos/Proyectos-Regulares/<slug>/propuesta.md` y `Proyectos/Tareas/<slug>.md` (y los
+   de `Proyectos-Regulares/Archivados/<slug>/` y `Tareas/Archivados/<slug>.md`) con `## Estado`, `Fase:` en
+   `explorar | proponer | aplicar | pausado | archivado`, y `Área:` que exista en la tabla de áreas (E). Un trabajo
+   en `Archivados/` sin `Resultado:` (A; `ninguno — …` cuenta como presente). **Fuera de su hogar (E):** una carpeta
+   no reservada directamente en `Proyectos/` (los proyectos viven en `Proyectos-Regulares/`); `Proyectos/Archivados/`
+   (lo archivado vive dentro de `Tareas/` y de `Proyectos-Regulares/`); una carpeta dentro de `Tareas/` que no sea
+   `Archivados`, o cualquiera dentro de `Tareas/Archivados/` (una tarea es un solo archivo); un `.md` que no sea
+   descriptor en `Proyectos/`, `Proyectos-Regulares/` o `Proyectos-Regulares/Archivados/`. `Id` de la ficha raíz en
+   `pendiente` (A): falta correr `/proyectos:setup`.
+9. **V9 Bitácora.** En `Decisiones/`, solo archivos `Q[1-4]-AAAA.md` además de los tres descriptores (E). Desde la primera línea que empieza con
    fecha en adelante, toda línea no vacía empieza con `AAAA-MM-DD ·` (E).
 10. **V10 Manifiesto del ejemplo.** Si el `Id` de la ficha raíz no es `ejemplo`, ninguna ruta de `.ccos/ejemplo.txt`
     debe existir (E por ruta).
@@ -48,7 +60,7 @@ Dentro de `Proyectos/` (no son trabajos): `Tareas`, `Archivados`, `adjuntos`.
 
 Detalles de V8 que también aplican a mano: los slugs (carpetas de trabajo, archivos de tarea, `Id` raíz) van en
 kebab-case; un proyecto en fase `aplicar` o `archivado` tiene los cuatro documentos; `Fase: archivado` fuera de
-`Archivados/` es E; las rutas de `Resultado:` son relativas a la raíz, sin `..`, y deben existir. Las fechas de
+su `Archivados/` (la de proyectos o la de tareas) es E, y un trabajo dentro de `Archivados/` con otra fase también; las rutas de `Resultado:` son relativas a la raíz, sin `..`, y deben existir. Las fechas de
 cabeceras y bitácora deben existir en el calendario.
 
 ## Reporte

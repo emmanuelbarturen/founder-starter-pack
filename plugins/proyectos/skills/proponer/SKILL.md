@@ -23,7 +23,8 @@ proyecto» son parte de la entrevista.
 ## 1. ¿En qué trabajamos?
 
 El nombre puede venir en $ARGUMENTS. **Si no viene, no lo inventes:** lista los trabajos activos (carpetas de
-`Proyectos/` que no sean `Tareas/`, `Archivados/` ni `adjuntos/`, más los archivos de `Proyectos/Tareas/`) y
+`Proyectos/Proyectos-Regulares/` menos `Archivados/`, más los `.md` de `Proyectos/Tareas/` menos los tres
+descriptores) y
 preséntalos con `AskUserQuestion` (header "Trabajo") con una opción por trabajo **más la opción fija «Nuevo»**.
 `AskUserQuestion` admite hasta 4 opciones: con más de 3 trabajos, ofrece los 3 más recientes más «Nuevo» y pide el
 resto por nombre en texto libre. Lo mismo vale para las áreas: más de 4, agrúpalas o pide el nombre. Deriva el
@@ -39,7 +40,8 @@ resto por nombre en texto libre. Lo mismo vale para las áreas: más de 4, agrú
 Con `AskUserQuestion` (header "Tamaño"): **Tarea** / **Proyecto**, con la heurística de `Proyectos/_context.md` y tu
 recomendación. Luego el **área** (header "Área"), ofreciendo solo las filas de la tabla de áreas. Si a mitad de
 camino una tarea crece (aparece solución técnica propia, más de ~5 pasos, alguien más lo va a construir), dilo y
-**gradúala**: crea la carpeta con el mismo slug y su archivo pasa a ser `propuesta.md`.
+**gradúala**: crea `Proyectos/Proyectos-Regulares/<slug>/` con el mismo slug y mueve ahí su archivo como
+`propuesta.md` (no queda copia en `Proyectos/Tareas/`).
 
 ## 3. Rama tarea
 
@@ -51,7 +53,7 @@ paso 7.
 
 ## 4. Rama proyecto — entrevista en vivo
 
-1. **Cimientos:** `propuesta.md` desde `${CLAUDE_PLUGIN_ROOT}/templates/proyecto/propuesta.md` con el bloque `## Estado` completo
+1. **Cimientos** (en `Proyectos/Proyectos-Regulares/<slug>/`): `propuesta.md` desde `${CLAUDE_PLUGIN_ROOT}/templates/proyecto/propuesta.md` con el bloque `## Estado` completo
    (`Fase: proponer`, `Área:`, `Resultado esperado:` tentativo) y `exploracion.md` desde su molde. Si
    `/proyectos:explorar` dejó conclusiones, hereda esos puntos.
 2. **Loop de requerimientos** → *Playbook A*. Documenta gated por OK: cuando un frente quede estable, pregunta

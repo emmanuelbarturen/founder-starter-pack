@@ -19,8 +19,9 @@ Lee `_context.md` y `_rules.md` de la raíz y `Proyectos/_context.md`. Cuando se
 
 ## 1. ¿Qué ejecutamos?
 
-El nombre puede venir en $ARGUMENTS. **Si no viene**, lista los trabajos con plan (carpetas de `Proyectos/` con
-`tareas.md`, sin `Tareas/`, `Archivados/` ni `adjuntos/`; y los archivos de `Proyectos/Tareas/`) y preséntalos con
+El nombre puede venir en $ARGUMENTS. **Si no viene**, lista los trabajos con plan (carpetas de
+`Proyectos/Proyectos-Regulares/` con `tareas.md`, menos `Archivados/`; y los `.md` de `Proyectos/Tareas/` menos los
+tres descriptores) y preséntalos con
 `AskUserQuestion` (header "Trabajo"). Si no hay ninguno, dilo — los planes se crean con `/proyectos:proponer` — y
 detente.
 

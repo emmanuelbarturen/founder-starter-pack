@@ -1,12 +1,13 @@
 ---
 name: archivar
-description: Cierra un trabajo terminado — confirma dónde queda su resultado (pregunta siempre), lo mueve a Proyectos/Archivados/ y registra el hito en Decisiones. También pausa un trabajo sin archivarlo
+description: Cierra un trabajo terminado — confirma dónde queda su resultado (pregunta siempre), lo mueve a la carpeta Archivados/ de proyectos o de tareas y registra el hito en Decisiones. También pausa un trabajo sin archivarlo
 argument-hint: [trabajo]
 disable-model-invocation: true
 ---
 
 Cierras un trabajo: verificas su plan, **confirmas con el usuario dónde queda cada resultado**, mueves el trabajo a
-`Proyectos/Archivados/` y dejas el hito en la bitácora. Es el final del ciclo.
+su `Archivados/` (`Proyectos/Proyectos-Regulares/Archivados/` si es proyecto, `Proyectos/Tareas/Archivados/` si es
+tarea) y dejas el hito en la bitácora. Es el final del ciclo.
 
 Trabajo (opcional): $ARGUMENTS
 
@@ -17,8 +18,9 @@ Lee `_context.md` de la raíz y `Proyectos/_context.md`. Cuando sepas el área d
 
 ## 1. ¿Qué archivamos?
 
-El nombre puede venir en $ARGUMENTS. **Si no viene**, lista los trabajos activos (carpetas de `Proyectos/` sin
-`Tareas/`, `Archivados/` ni `adjuntos/`; y los archivos de `Proyectos/Tareas/`) y preséntalos con `AskUserQuestion`
+El nombre puede venir en $ARGUMENTS. **Si no viene**, lista los trabajos activos (carpetas de
+`Proyectos/Proyectos-Regulares/` menos `Archivados/`; y los `.md` de `Proyectos/Tareas/` menos los tres
+descriptores) y preséntalos con `AskUserQuestion`
 (header "Trabajo"; con más de 4, los 4 más recientes y el resto por nombre en texto libre). Si no hay nada, dilo y
 detente.
 
@@ -57,8 +59,9 @@ cabecera, una línea `> Reemplazado el AAAA-MM-DD por \`<ruta nueva>\`.` y actua
 
 1. Actualiza `## Estado`: la viñeta **`- **Fase:** archivado`**, fecha de hoy, y la fecha `Actualizado:` de la
    cabecera.
-2. Proyecto: `mv Proyectos/<slug> Proyectos/Archivados/<slug>`. Tarea: `mv Proyectos/Tareas/<slug>.md
-   Proyectos/Archivados/Tareas/<slug>.md` (crea `Archivados/Tareas/` si no existe). No renombres con fecha: la
+2. Proyecto: `mv Proyectos/Proyectos-Regulares/<slug> Proyectos/Proyectos-Regulares/Archivados/<slug>`. Tarea:
+   `mv Proyectos/Tareas/<slug>.md Proyectos/Tareas/Archivados/<slug>.md`. Si la carpeta `Archivados/` de destino
+   no existe, créala. No renombres con fecha: la
    fecha vive en el Estado y en la bitácora.
 3. Si `_context.md` de la raíz tiene «Trabajos activos», quita la línea del trabajo.
 

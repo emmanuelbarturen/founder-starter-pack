@@ -4,7 +4,7 @@
  *
  * Uso:  bun <plugin>/scripts/validar.ts [--publicar] [--json] [--raiz <dir>]
  *
- * Un solo archivo, sin dependencias: solo node:fs y node:path.
+ * Un solo archivo, sin dependencias: solo node:fs, node:path y node:child_process.
  * Salida: 0 limpio · 1 errores de estructura (V1-V10) · 2 solo higiene (V11, con --publicar) · 3 uso.
  * Si conviven errores de estructura e higiene, gana 1.
  */
@@ -14,7 +14,8 @@ import { basename, dirname, join, relative, resolve, sep } from "node:path";
 
 // ── Constantes ─────────────────────────────────────────────────────────────
 const RESERVADAS_RAIZ = new Set(["Proyectos", "Decisiones", "_Referencias", "_Templates", "Plans", ".claude", ".ccos", ".git", "node_modules"]);
-const RESERVADAS_PROYECTOS = new Set(["Tareas", "Archivados", "adjuntos"]);
+const RESERVADAS_PROYECTOS = new Set(["Tareas", "Proyectos-Regulares", "adjuntos"]);
+const CARPETAS_SERVICIO = ["Proyectos", "Proyectos/Tareas", "Proyectos/Tareas/Archivados", "Proyectos/Proyectos-Regulares", "Proyectos/Proyectos-Regulares/Archivados", "Decisiones"];
 const DESCRIPTORES = ["_context.md", "_rules.md", "_enlaces.md"];
 const CANONICOS = new Set(["propuesta.md", "exploracion.md", "solucion.md", "tareas.md"]);
 const FASES = new Set(["explorar", "proponer", "aplicar", "pausado", "archivado"]);
@@ -124,7 +125,12 @@ const areasDeclaradas = filasTabla(ctxRaiz, "Áreas");
 const areasReales = subdirs(raiz).filter((n) => !RESERVADAS_RAIZ.has(n) && !n.startsWith("."));
 
 // ── V1 Descriptores ────────────────────────────────────────────────────────
+// Proyectos/_context.md es obligatorio aunque falte la carpeta entera; el resto de descriptores de servicio solo avisan.
 if (!existsSync(join(raiz, "Proyectos", "_context.md"))) err("V1", "Proyectos/_context.md", "falta el descriptor");
+for (const carpeta of CARPETAS_SERVICIO) if (esDir(join(raiz, carpeta))) for (const d of DESCRIPTORES) {
+  const ruta = `${carpeta}/${d}`;
+  if (ruta !== "Proyectos/_context.md" && !existsSync(join(raiz, ruta))) aviso("V1", ruta, "falta el descriptor de la carpeta de servicio");
+}
 for (const d of ["_rules.md", "_enlaces.md"]) if (!existsSync(join(raiz, d))) aviso("V1", d, "falta en la raíz");
 for (const a of areasReales) for (const d of DESCRIPTORES) {
   if (!existsSync(join(raiz, a, d))) err("V1", `${a}/${d}`, "falta el descriptor del área");
@@ -198,8 +204,9 @@ function revisarTrabajo(p: string, archivado: boolean, esProyecto: boolean) {
   if (!/^## Estado\s*$/m.test(t)) { err("V8", r, "sin bloque ## Estado"); return; }
   const fase = campoEstado(t, "Fase")?.split(/\s+/)[0] ?? "";
   if (!FASES.has(fase)) err("V8", r, `Fase inválida o ausente: «${fase}»`);
-  if (archivado && fase !== "archivado") err("V8", r, `está en Archivados/ pero su Fase es «${fase}»`);
-  if (!archivado && fase === "archivado") err("V8", r, "Fase archivado pero sigue fuera de Proyectos/Archivados/");
+  const carpetaArchivados = esProyecto ? "Proyectos/Proyectos-Regulares/Archivados/" : "Proyectos/Tareas/Archivados/";
+  if (archivado && fase !== "archivado") err("V8", r, `está en ${carpetaArchivados} pero su Fase es «${fase}»`);
+  if (!archivado && fase === "archivado") err("V8", r, `Fase archivado pero sigue fuera de ${carpetaArchivados}`);
   if (esProyecto && (fase === "aplicar" || fase === "archivado")) {
     for (const f of CANONICOS) if (!existsSync(join(dirname(p), f))) err("V8", `${rel(dirname(p))}/${f}`, `falta en un proyecto en fase ${fase} (los cuatro documentos son obligatorios desde aplicar)`);
   }
@@ -221,20 +228,33 @@ function revisarTrabajo(p: string, archivado: boolean, esProyecto: boolean) {
 }
 {
   const base = join(raiz, "Proyectos");
-  for (const d of subdirs(base)) if (!RESERVADAS_PROYECTOS.has(d)) revisarTrabajo(join(base, d, "propuesta.md"), false, true);
-  for (const f of archivos(join(base, "Tareas"))) if (f.endsWith(".md")) revisarTrabajo(join(base, "Tareas", f), false, false);
-  const arch = join(base, "Archivados");
-  for (const d of subdirs(arch)) if (d !== "Tareas") revisarTrabajo(join(arch, d, "propuesta.md"), true, true);
-  for (const f of archivos(join(arch, "Tareas"))) if (f.endsWith(".md")) revisarTrabajo(join(arch, "Tareas", f), true, false);
-  if (idRaiz && !RE_KEBAB.test(idRaiz)) aviso("V8", "_context.md", `el Id «${idRaiz}» no está en kebab-case`);
+  const tareas = join(base, "Tareas");
+  const regulares = join(base, "Proyectos-Regulares");
+  const tareasArchivadas = join(tareas, "Archivados");
+  const proyectosArchivados = join(regulares, "Archivados");
+  for (const d of subdirs(base)) {
+    if (d === "Archivados") err("V8", "Proyectos/Archivados/", "los trabajos archivados viven en Proyectos/Proyectos-Regulares/Archivados/ y Proyectos/Tareas/Archivados/");
+    else if (!RESERVADAS_PROYECTOS.has(d)) err("V8", `Proyectos/${d}/`, "los proyectos viven en Proyectos/Proyectos-Regulares/<slug>/");
+  }
+  for (const f of archivos(base)) if (f.endsWith(".md") && !DESCRIPTORES.includes(f)) err("V8", `Proyectos/${f}`, "las tareas viven en Proyectos/Tareas/<slug>.md y los proyectos en Proyectos/Proyectos-Regulares/<slug>/");
+  for (const d of subdirs(tareas)) if (d !== "Archivados") err("V8", `Proyectos/Tareas/${d}/`, "una tarea es un solo archivo: vive en Proyectos/Tareas/<slug>.md");
+  for (const d of subdirs(tareasArchivadas)) err("V8", `Proyectos/Tareas/Archivados/${d}/`, "una tarea es un solo archivo: vive en Proyectos/Tareas/<slug>.md");
+  for (const f of archivos(regulares)) if (f.endsWith(".md") && !DESCRIPTORES.includes(f)) err("V8", `Proyectos/Proyectos-Regulares/${f}`, "las tareas viven en Proyectos/Tareas/<slug>.md y los proyectos en Proyectos/Proyectos-Regulares/<slug>/");
+  for (const f of archivos(proyectosArchivados)) if (f.endsWith(".md") && !DESCRIPTORES.includes(f)) err("V8", `Proyectos/Proyectos-Regulares/Archivados/${f}`, "las tareas viven en Proyectos/Tareas/<slug>.md y los proyectos en Proyectos/Proyectos-Regulares/<slug>/");
+  for (const d of subdirs(regulares)) if (d !== "Archivados") revisarTrabajo(join(regulares, d, "propuesta.md"), false, true);
+  for (const f of archivos(tareas)) if (f.endsWith(".md") && !DESCRIPTORES.includes(f)) revisarTrabajo(join(tareas, f), false, false);
+  for (const d of subdirs(proyectosArchivados)) revisarTrabajo(join(proyectosArchivados, d, "propuesta.md"), true, true);
+  for (const f of archivos(tareasArchivadas)) if (f.endsWith(".md") && !DESCRIPTORES.includes(f)) revisarTrabajo(join(tareasArchivadas, f), true, false);
+  if (idRaiz === "pendiente") aviso("V8", "_context.md", "el Id sigue en `pendiente`: falta correr /proyectos:setup");
+  else if (idRaiz && !RE_KEBAB.test(idRaiz)) aviso("V8", "_context.md", `el Id «${idRaiz}» no está en kebab-case`);
 }
 
 // ── V9 Bitácora ────────────────────────────────────────────────────────────
 {
   const base = join(raiz, "Decisiones");
   for (const f of archivos(base)) {
+    if (DESCRIPTORES.includes(f)) continue;
     const r = `Decisiones/${f}`;
-    if (f === ".gitkeep") continue;
     if (!/^Q[1-4]-\d{4}\.md$/.test(f)) { err("V9", r, "nombre fuera del patrón Q<N>-<AAAA>.md"); continue; }
     const lineas = leer(join(base, f)).split("\n");
     let dentro = false;
