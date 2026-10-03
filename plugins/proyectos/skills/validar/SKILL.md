@@ -1,6 +1,6 @@
 ---
 name: validar
-description: Revisa la estructura del repo de la empresa con el validador del plugin, o a mano si no hay bun (descriptores, tablas contra carpetas, cabeceras, tope de líneas, índice de referencias, trabajos con Estado, manifiesto del ejemplo) y, si se pide, la higiene previa a publicar
+description: Revisa la estructura del repo de la empresa con el validador del plugin, o a mano si no hay bun (descriptores, tablas contra carpetas, cabeceras, tope de líneas, índice de referencias, trabajos con Estado, bitácora) y, si se pide, la higiene previa a publicar
 argument-hint: [--publicar]
 ---
 
@@ -9,11 +9,11 @@ la raíz del repo `bun "${CLAUDE_PLUGIN_ROOT}/scripts/validar.ts" --raiz "${CLAU
 recibidos, muestra su salida y termina. **Solo si no hay `bun`** (o el usuario prefiere no instalarlo) haces los mismos
 chequeos a mano, con Read, Glob y Grep: mismo contrato, misma severidad, mismo reporte.
 
-Argumentos: $ARGUMENTS (`--publicar` activa el chequeo V11).
+Argumentos: $ARGUMENTS (`--publicar` activa el chequeo V10).
 
 ## Nombres reservados
 
-Raíz (no son áreas): `Proyectos`, `Decisiones`, `_Referencias`, `_Templates`, `Plans`, `.claude`, `.ccos`, `.git`.
+Raíz (no son áreas): `Proyectos`, `Decisiones`, `_Referencias`, `Plans`, `.claude`, `.ccos`, `.git`.
 Dentro de `Proyectos/` (no son trabajos): `Tareas`, `Proyectos-Regulares`, `adjuntos`. Dentro de `Tareas/` y de
 `Proyectos-Regulares/`: `Archivados`.
 
@@ -32,12 +32,12 @@ Carpetas de servicio: `Proyectos`, `Proyectos/Tareas`, `Proyectos/Tareas/Archiva
 3. **V3 Temas.** Por área: las filas de la tabla «Temas» de su `_context.md` contra sus subcarpetas, en ambos
    sentidos (E). Un `.md` suelto en el área que no sea uno de los tres descriptores (E).
 4. **V4 Cabecera.** Primera línea de todo `.md` = `<!-- Creado: AAAA-MM-DD · Actualizado: AAAA-MM-DD · Creador: … -->`
-   con fechas reales (E). Los marcadores `AAAA-MM-DD` valen solo bajo `_Templates/` (solo repos anteriores al plugin). Fuera de alcance: `.claude/`,
+   con fechas reales (E). Fuera de alcance: `.claude/`,
    `_Referencias/**` salvo `_index.md`, `Plans/`.
 5. **V5 Tope de 120 líneas** contando fuera de bloques de código y sin filas de tabla (E). Exentos: `Decisiones/`,
    `_Referencias/_index.md`, `.claude/`.
 6. **V6 Slug de plan-mode** fuera de `Plans/`: `.md` con nombre kebab de tres o más palabras, sin cabecera, fuera de
-   `Proyectos/`, `_Referencias/`, `_Templates/` (solo repos anteriores al plugin) y `.claude/` (A).
+   `Proyectos/`, `_Referencias/` y `.claude/` (A).
 7. **V7 Referencias.** `_Referencias/` con un solo nivel de subcarpetas (E); cada archivo listado en `_index.md` por
    su ruta relativa y sin filas que apunten a archivos inexistentes (E).
 8. **V8 Trabajos.** Cada `Proyectos/Proyectos-Regulares/<slug>/propuesta.md` y `Proyectos/Tareas/<slug>.md` (y los
@@ -51,9 +51,7 @@ Carpetas de servicio: `Proyectos`, `Proyectos/Tareas`, `Proyectos/Tareas/Archiva
    `pendiente` (A): falta correr `/proyectos:setup`.
 9. **V9 Bitácora.** En `Decisiones/`, solo archivos `Q[1-4]-AAAA.md` además de los tres descriptores (E). Desde la primera línea que empieza con
    fecha en adelante, toda línea no vacía empieza con `AAAA-MM-DD ·` (E).
-10. **V10 Manifiesto del ejemplo.** Si el `Id` de la ficha raíz no es `ejemplo`, ninguna ruta de `.ccos/ejemplo.txt`
-    debe existir (E por ruta).
-11. **V11 Higiene** (solo con `--publicar`). Cada patrón de `.ccos/higiene.txt` y de `.ccos/higiene.local.txt` (si
+10. **V10 Higiene** (solo con `--publicar`). Cada patrón de `.ccos/higiene.txt` y de `.ccos/higiene.local.txt` (si
     existe) buscado con Grep en todo el árbol menos `.git`, `Plans/`, `.ccos/` y `LICENSE`. Cada
     coincidencia es E, con archivo y línea. Además, si el repo tiene git, `git ls-files .ccos/higiene.local.txt` debe
     devolver vacío: ese archivo versionado es E (publica justo lo que debía proteger).
@@ -66,7 +64,7 @@ cabeceras y bitácora deben existir en el calendario.
 ## Reporte
 
 Agrupa por chequeo, una línea por hallazgo: `✗ [V3] Ventas/resumen.md — .md suelto fuera de un tema`. Cierra con
-`N errores · M avisos` y el veredicto: **limpio** (0 errores), **estructura** (hay errores de V1-V10), **higiene**
-(solo V11 falló). No corrijas nada sin que el usuario lo pida: este comando informa.
+`N errores · M avisos` y el veredicto: **limpio** (0 errores), **estructura** (hay errores de V1-V9), **higiene**
+(solo V10 falló). No corrijas nada sin que el usuario lo pida: este comando informa.
 
 Idioma: español siempre. Directo, breve, cero relleno.

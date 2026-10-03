@@ -7,7 +7,7 @@
 
 | Campo | Valor |
 |---|---|
-| Id | `<id>`  <!-- `ejemplo` en la copia de muestra, `pendiente` tras init; setup lo cambia --> |
+| Id | `<id>`  <!-- `pendiente` tras init; setup lo cambia --> |
 | Nombre | <nombre para mostrar> |
 | Qué hace | <una línea: qué vende y a quién> |
 | Etapa | <idea / validación / operando / escalando> |

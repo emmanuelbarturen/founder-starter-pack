@@ -179,11 +179,3 @@ test("Proyectos/_context.md faltante: exit 1 por V1, sin aviso duplicado", () =>
   expect(r.out).toContain("Proyectos/_context.md — falta el descriptor");
   expect(r.out).toContain("0 avisos");
 });
-
-test("residuo del ejemplo con Id propio: exit 1 por V10", () => {
-  const dir = copia();
-  writeFileSync(join(dir, ".ccos", "ejemplo.txt"), "# manifiesto\nVentas/clientes/\n");
-  const r = validar(dir);
-  expect(r.code).toBe(1);
-  expect(r.out).toContain("V10");
-});

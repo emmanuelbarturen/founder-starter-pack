@@ -60,5 +60,3 @@ pregunta si los borra.
 Pensada para un emprendedor que es la cara de su negocio y publica él mismo. Un redactor es un subagente que escribe
 como tú sobre un grupo de temas. Cada redactor tiene su propia voz, porque cada grupo de temas pide un lector, un
 propósito y un tono distintos. Para usarlo: «redactor-<nombre>, escribe un post sobre…».
-
-Historial en [VERSIONS.md](VERSIONS.md).

@@ -16,23 +16,23 @@ Marketplace de plugins de productividad para [Claude Code](https://code.claude.c
 ### Claude Code: app de escritorio
 
 Pestaña *Code*: botón **+** junto al cuadro de texto → **Plugins** → **Add plugin** → agrega el marketplace
-`emmanuelbarturen/productividad-claude-code-marketplace` → instala el plugin que quieras.
+`emmanuelbarturen/founder-starter-pack` → instala el plugin que quieras.
 
 ### Claude Code: terminal
 
 ```
-claude plugin marketplace add emmanuelbarturen/productividad-claude-code-marketplace
-claude plugin install proyectos@productividad-claude-code-marketplace
+claude plugin marketplace add emmanuelbarturen/founder-starter-pack
+claude plugin install proyectos@founder-starter-pack
 ```
 
 ### Actualizar
 
-`/plugin` → *Marketplaces* → `productividad-claude-code-marketplace` → *Update*. Para recibir cambios solos, activa
+`/plugin` → *Marketplaces* → `founder-starter-pack` → *Update*. Para recibir cambios solos, activa
 *Enable auto-update* en ese mismo menú.
 
-## Contribuir
+## Versiones
 
-Ver [CONTRIBUTING.md](CONTRIBUTING.md). Cada plugin lleva su historial en `plugins/<plugin>/VERSIONS.md`.
+El historial de `proyectos` está en [plugins/proyectos/VERSIONS.md](plugins/proyectos/VERSIONS.md).
 
 ## Licencia
 

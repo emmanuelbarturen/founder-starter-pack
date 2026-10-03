@@ -8,7 +8,8 @@
 - **Cambia la forma de `Proyectos/`.** Los proyectos viven en `Proyectos/Proyectos-Regulares/<slug>/`. Lo archivado
   vive en `Proyectos/Proyectos-Regulares/Archivados/` y en `Proyectos/Tareas/Archivados/`. `Proyectos/<slug>/` y
   `Proyectos/Archivados/` ahora son error del validador (V8).
-- `setup` reconoce el repo recién creado por `init` (`Id` = `pendiente`) y ahí no borra ningún ejemplo.
+- `setup` corre después de `init` (`Id` = `pendiente`). Ya no existe la empresa de ejemplo: se retiran su paso de
+  borrado en `setup` y el chequeo del manifiesto en el validador. El chequeo de higiene pasa a ser V10.
 - El validador acepta los tres descriptores en las carpetas de servicio, avisa si falta alguno y avisa si el `Id`
   sigue en `pendiente`. Marca como error los archivos y carpetas sueltos dentro de `Proyectos/`.
 - `templates/_rules-raiz.md` y `templates/_enlaces-raiz.md` pasan a `templates/base/_rules.md` y `_enlaces.md`.
@@ -36,8 +37,7 @@ Las rutas de `Resultado:` no cambian: apuntan a las áreas, no a `Proyectos/`.
 
 ## 0.1.0 — 2026-09-28
 
-- Primera versión como plugin. El ciclo sale del repo Company Cycle OS, donde vivía en `.claude/commands/proyecto/`
-  con el prefijo `/proyecto:`; ahora es `/proyectos:`.
-- Nueva skill `reglas` con lo que antes estaba en el `CLAUDE.md` y en `Proyectos/_context.md` de la empresa.
-- Las plantillas pasan de `_Templates/` del repo de la empresa a `templates/` del plugin.
-- `validar.ts` pasa a `scripts/` y gana `bun test` con 6 casos.
+- Primera versión del plugin, con el prefijo `/proyectos:`.
+- Skill `reglas` con las reglas del repo de la empresa.
+- Las plantillas viven en `templates/` del plugin.
+- `validar.ts` vive en `scripts/`, con `bun test` de 6 casos.

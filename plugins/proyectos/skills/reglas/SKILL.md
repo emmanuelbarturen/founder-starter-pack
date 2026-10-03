@@ -1,6 +1,6 @@
 ---
 name: reglas
-description: Reglas de trabajo de un repo de empresa en Markdown (Company Cycle OS) — clasificar antes de ejecutar, descriptores _context/_rules/_enlaces, áreas y temas, un solo hogar por archivo, tarea vs proyecto, bloque Estado, convenciones y validación. Cárgalas al inicio de cada sesión en un repo con _context.md en la raíz y Proyectos/, y antes de crear, mover o archivar cualquier archivo ahí
+description: Reglas de trabajo de un repo de empresa en Markdown — clasificar antes de ejecutar, descriptores _context/_rules/_enlaces, áreas y temas, un solo hogar por archivo, tarea vs proyecto, bloque Estado, convenciones y validación. Cárgalas al inicio de cada sesión en un repo con _context.md en la raíz y Proyectos/, y antes de crear, mover o archivar cualquier archivo ahí
 argument-hint: (sin argumentos)
 ---
 
@@ -48,7 +48,7 @@ Proyectos/Tareas/<slug>.md                 tarea (mini-proyecto): un solo archiv
 Proyectos/Tareas/Archivados/               tareas cerradas, con `Resultado:` en su Estado
 _Referencias/_index.md                     archivos de afuera que se consultan; un nivel de subcarpetas
 Decisiones/Q<N>-<AAAA>.md                  bitácora de la empresa, una línea por evento
-.ccos/                                     patrones de higiene y manifiesto del ejemplo
+.ccos/                                     patrones de higiene para `validar --publicar`
 ```
 
 Nombres reservados: en la raíz `Proyectos`, `Decisiones`, `_Referencias`, `Plans`, `.claude`, `.ccos`; dentro de
@@ -60,7 +60,7 @@ Nombres reservados: en la raíz `Proyectos`, `Decisiones`, `_Referencias`, `Plan
 | Situación | Comando |
 |---|---|
 | Carpeta vacía: crear la estructura base (y seguir con setup) | `/proyectos:init` |
-| Primera vez: nombrar la empresa, declarar áreas y temas, borrar el ejemplo si lo hay | `/proyectos:setup` |
+| Primera vez: nombrar la empresa, declarar áreas y temas | `/proyectos:setup` |
 | Pensar una idea sin compromiso, antes de crear nada | `/proyectos:explorar` |
 | Crear o modificar un trabajo hasta tener su plan de tareas | `/proyectos:proponer` |
 | Ejecutar el plan y dejar cada resultado en su área y tema | `/proyectos:aplicar` |

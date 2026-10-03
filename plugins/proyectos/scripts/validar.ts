@@ -1,11 +1,11 @@
 #!/usr/bin/env bun
 /**
- * validar.ts — validador de estructura de Company Cycle OS.
+ * validar.ts — validador de estructura del repo de una empresa en Markdown.
  *
  * Uso:  bun <plugin>/scripts/validar.ts [--publicar] [--json] [--raiz <dir>]
  *
  * Un solo archivo, sin dependencias: solo node:fs, node:path y node:child_process.
- * Salida: 0 limpio · 1 errores de estructura (V1-V10) · 2 solo higiene (V11, con --publicar) · 3 uso.
+ * Salida: 0 limpio · 1 errores de estructura (V1-V9) · 2 solo higiene (V10, con --publicar) · 3 uso.
  * Si conviven errores de estructura e higiene, gana 1.
  */
 import { execFileSync } from "node:child_process";
@@ -13,7 +13,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
 
 // ── Constantes ─────────────────────────────────────────────────────────────
-const RESERVADAS_RAIZ = new Set(["Proyectos", "Decisiones", "_Referencias", "_Templates", "Plans", ".claude", ".ccos", ".git", "node_modules"]);
+const RESERVADAS_RAIZ = new Set(["Proyectos", "Decisiones", "_Referencias", "Plans", ".claude", ".ccos", ".git", "node_modules"]);
 const RESERVADAS_PROYECTOS = new Set(["Tareas", "Proyectos-Regulares", "adjuntos"]);
 const CARPETAS_SERVICIO = ["Proyectos", "Proyectos/Tareas", "Proyectos/Tareas/Archivados", "Proyectos/Proyectos-Regulares", "Proyectos/Proyectos-Regulares/Archivados", "Decisiones"];
 const DESCRIPTORES = ["_context.md", "_rules.md", "_enlaces.md"];
@@ -157,11 +157,10 @@ for (const p of mds) {
   const r = rel(p);
   const texto = leer(p);
   const primera = texto.split("\n")[0] ?? "";
-  const enTemplates = r.startsWith("_Templates/");
   if (!coincide(r, FUERA_CABECERA)) {
     const m = primera.match(RE_CABECERA);
     if (!m) err("V4", r, "sin cabecera de metadatos en la primera línea");
-    else if (!enTemplates && (m[1] === "AAAA-MM-DD" || m[2] === "AAAA-MM-DD")) err("V4", r, "cabecera con fecha sin rellenar");
+    else if ((m[1] === "AAAA-MM-DD" || m[2] === "AAAA-MM-DD")) err("V4", r, "cabecera con fecha sin rellenar");
     else if (!fechaReal(m[1]) || !fechaReal(m[2])) err("V4", r, `cabecera con una fecha que no existe en el calendario (${m[1]} / ${m[2]})`);
   }
   if (!coincide(r, EXENTOS_TOPE)) {
@@ -169,7 +168,7 @@ for (const p of mds) {
     if (n > TOPE_LINEAS) err("V5", r, `${n} líneas contadas (tope ${TOPE_LINEAS}); parte el documento`);
   }
   const nombre = basename(r, ".md");
-  const fueraDeZonas = !/^(Proyectos|_Referencias|_Templates|\.claude|Plans)\//.test(r);
+  const fueraDeZonas = !/^(Proyectos|_Referencias|\.claude|Plans)\//.test(r);
   if (fueraDeZonas && /^[a-z0-9]+(-[a-z0-9]+){2,}$/.test(nombre) && !RE_CABECERA.test(primera)) {
     aviso("V6", r, "parece un plan de sesión (slug largo sin cabecera) fuera de Plans/");
   }
@@ -267,25 +266,7 @@ function revisarTrabajo(p: string, archivado: boolean, esProyecto: boolean) {
   }
 }
 
-// ── V10 Manifiesto del ejemplo ─────────────────────────────────────────────
-{
-  const man = join(raiz, ".ccos", "ejemplo.txt");
-  if (idRaiz !== "ejemplo" && existsSync(man)) {
-    for (const l of leer(man).split("\n")) {
-      const ruta = l.trim();
-      if (!ruta || ruta.startsWith("#")) continue;
-      if (existsSync(join(raiz, ruta))) err("V10", ruta, "ruta de la empresa de ejemplo que sigue existiendo tras el setup");
-    }
-    // Residuo textual del ejemplo en archivos que setup debía reescribir.
-    for (const p of mds) {
-      const r = rel(p);
-      if (/^(\.claude|_Templates|Plans)\//.test(r) || r === "README.md" || r === "CHANGELOG.md") continue;
-      if (/Taller Norte/.test(leer(p))) err("V10", r, "menciona a la empresa de ejemplo (Taller Norte) con un Id distinto de `ejemplo`");
-    }
-  }
-}
-
-// ── V11 Higiene (solo --publicar) ──────────────────────────────────────────
+// ── V10 Higiene (solo --publicar) ──────────────────────────────────────────
 let erroresHigiene = 0;
 if (publicar) {
   const patrones: RegExp[] = [];
@@ -295,13 +276,13 @@ if (publicar) {
     for (const l of leer(p).split("\n")) {
       const s = l.trim();
       if (!s || s.startsWith("#")) continue;
-      try { patrones.push(new RegExp(s, "i")); } catch { err("V11", `.ccos/${f}`, `patrón inválido: ${s}`); erroresHigiene++; }
+      try { patrones.push(new RegExp(s, "i")); } catch { err("V10", `.ccos/${f}`, `patrón inválido: ${s}`); erroresHigiene++; }
     }
   }
   // El archivo de patrones privados nunca puede viajar en el repo.
   try {
     const seguidos = execFileSync("git", ["ls-files", "--", ".ccos/higiene.local.txt"], { cwd: raiz, stdio: ["ignore", "pipe", "ignore"] }).toString().trim();
-    if (seguidos) { err("V11", ".ccos/higiene.local.txt", "está versionado en git: contiene tus patrones privados, sácalo del índice"); erroresHigiene++; }
+    if (seguidos) { err("V10", ".ccos/higiene.local.txt", "está versionado en git: contiene tus patrones privados, sácalo del índice"); erroresHigiene++; }
   } catch { /* sin git: nada que comprobar */ }
   for (const p of todos) {
     const r = rel(p);
@@ -310,7 +291,7 @@ if (publicar) {
     try { texto = leer(p); } catch { continue; }
     if (texto.includes("\u0000")) continue;
     texto.split("\n").forEach((l, i) => {
-      for (const re of patrones) if (re.test(l)) { err("V11", `${r}:${i + 1}`, `coincide con ${re.source}`); erroresHigiene++; break; }
+      for (const re of patrones) if (re.test(l)) { err("V10", `${r}:${i + 1}`, `coincide con ${re.source}`); erroresHigiene++; break; }
     });
   }
 }

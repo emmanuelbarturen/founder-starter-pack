@@ -23,7 +23,7 @@ Mira si existe `_context.md` en la raíz.
 - **No existe** → sigue al paso 1.
 - **Existe y su `Id` es `pendiente`** → `init` ya corrió aquí. Sigue al paso 1 para completar lo que falte.
 - **Existe con cualquier otro `Id`** → el repo ya tiene estructura. **No toques nada.** Dilo en una línea, indica que
-  lo que sigue es `/proyectos:setup` (si el `Id` es `ejemplo`) o `/proyectos:validar` (si ya está en uso), y termina.
+  para revisarla está `/proyectos:validar`, y termina.
 
 ## 1. Crear la estructura
 

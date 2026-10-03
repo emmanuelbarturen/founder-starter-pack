@@ -1,12 +1,12 @@
 # proyectos
 
-El ciclo de trabajo de una empresa que vive en Markdown. Funciona sobre un repo con la forma de Company Cycle OS:
+El ciclo de trabajo de una empresa que vive en Markdown. Funciona sobre el repo de tu empresa:
 `_context.md` en la raíz con la tabla de áreas, un `_context.md` por área con su tabla de temas, y `Proyectos/`.
 
 | Comando | Qué hace |
 |---|---|
 | `/proyectos:init` | Carpeta vacía: crea `Proyectos/` (con `Tareas/` y `Proyectos-Regulares/`) y `Decisiones/` con sus descriptores, y sigue con `setup` |
-| `/proyectos:setup` | Primera vez: nombra la empresa, declara áreas y temas, borra la empresa de ejemplo si la hay, primer commit |
+| `/proyectos:setup` | Primera vez: nombra la empresa, declara áreas y temas, primer commit |
 | `/proyectos:explorar` | Pensar una idea sin compromiso |
 | `/proyectos:proponer` | Entrevista → propuesta, solución y plan de tareas, con área y resultado esperado |
 | `/proyectos:aplicar` | Ejecuta el plan; cada resultado nace en `<Área>/<tema>/` |
@@ -17,11 +17,10 @@ El ciclo de trabajo de una empresa que vive en Markdown. Funciona sobre un repo 
 `init`, `setup`, `proponer`, `aplicar` y `archivar` solo corren cuando tú los invocas. `explorar`, `validar` y `reglas` también
 puede cargarlos Claude cuando el contexto lo pide.
 
-## Dos formas de empezar
+## Cómo empezar
 
-- **Carpeta vacía:** instala el plugin, abre la carpeta y escribe `/proyectos:init`. Crea la estructura base y pasa
-  a `setup` sin que escribas nada más.
-- **Plantilla con empresa de ejemplo:** abre la plantilla Company Cycle OS y escribe `/proyectos:setup`.
+Instala el plugin, abre una carpeta vacía y escribe `/proyectos:init`. Crea la estructura base y pasa a `setup` sin
+que escribas nada más.
 
 ```
 Proyectos/
@@ -31,9 +30,6 @@ Decisiones/                Q<N>-<AAAA>.md
 ```
 
 Cada carpeta lleva `_context.md`, `_rules.md` y `_enlaces.md`.
-
-Si usas la plantilla de empresa Company Cycle OS, no hace falta instalarlo: su `.claude/settings.json` ya declara el
-marketplace y el plugin, y la app los ofrece al aceptar la confianza de la carpeta.
 
 ## Qué trae
 
